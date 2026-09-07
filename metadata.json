@@ -1,0 +1,6 @@
+{
+  "name": "InputLab",
+  "description": "A precision browser-based input device testing and diagnostic suite for mice, keyboards, and gamepads.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
