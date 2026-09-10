@@ -61,8 +61,673 @@
         }
       })();
     </script>
+    <style id="inputlab-preloader-styles">
+      html.preloader-active,
+      body.preloader-active {
+        overflow: hidden !important;
+        background-color: #020711 !important;
+      }
+      body.preloader-active #root {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+      #root {
+        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #preloader, #preloader * {
+        box-sizing: border-box;
+      }
+      #preloader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #020711;
+        background-image: radial-gradient(circle at 50% 50%, #092645 0%, #041426 42%, #020711 78%);
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        user-select: none;
+        -webkit-user-select: none;
+        overflow: hidden;
+        transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.75s ease;
+      }
+      #preloader.hide {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .preloader-scene {
+        position: relative;
+        width: 500px;
+        height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Ambient Core Glow */
+      .preloader-glow {
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        background: #0284c7;
+        filter: blur(85px);
+        opacity: 0.18;
+        animation: preloaderPulse 3.6s ease-in-out infinite;
+      }
+      @keyframes preloaderPulse {
+        0%, 100% { transform: scale(0.85); opacity: 0.14; }
+        50% { transform: scale(1.18); opacity: 0.26; }
+      }
+
+      /* Radar Sweep Cone */
+      .preloader-scanner-cone {
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, transparent 70%, rgba(56, 189, 248, 0.04) 86%, rgba(56, 189, 248, 0.18) 100%);
+        mask-image: radial-gradient(circle, transparent 40%, black 72%);
+        -webkit-mask-image: radial-gradient(circle, transparent 40%, black 72%);
+        animation: preloaderSpin 3.8s linear infinite;
+        pointer-events: none;
+      }
+      .preloader-scanner-beam {
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border-radius: 50%;
+        border: 1px solid transparent;
+        border-top-color: #38bdf8;
+        filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8));
+        animation: preloaderSpin 3.8s linear infinite;
+        pointer-events: none;
+      }
+
+      /* Concentric Harmonic Rings */
+      .preloader-ring {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+      .preloader-ring1 {
+        width: 320px;
+        height: 320px;
+        border: 1px solid rgba(56, 189, 248, 0.22);
+        border-top-color: #38bdf8;
+        border-bottom-color: rgba(56, 189, 248, 0.12);
+        animation: preloaderSpin 8s linear infinite;
+      }
+      .preloader-ring2 {
+        width: 390px;
+        height: 390px;
+        border: 1px dashed rgba(99, 102, 241, 0.25);
+        animation: preloaderSpinReverse 14s linear infinite;
+      }
+      .preloader-ring3 {
+        width: 250px;
+        height: 250px;
+        border: 1px dotted rgba(56, 189, 248, 0.18);
+        animation: preloaderSpin 18s linear infinite;
+      }
+      .preloader-ring4 {
+        width: 450px;
+        height: 450px;
+        border: 1px solid rgba(168, 85, 247, 0.12);
+        animation: preloaderPulseRing 3.2s ease-in-out infinite;
+      }
+
+      @keyframes preloaderSpin {
+        to { transform: rotate(360deg); }
+      }
+      @keyframes preloaderSpinReverse {
+        to { transform: rotate(-360deg); }
+      }
+      @keyframes preloaderPulseRing {
+        0%, 100% { transform: scale(0.98); opacity: 0.35; }
+        50% { transform: scale(1.03); opacity: 0.75; }
+      }
+
+      /* Orbit Track Container */
+      .preloader-orbit {
+        position: absolute;
+        inset: 0;
+        animation: preloaderSpin 14s linear infinite;
+      }
+
+      /* Orbiting Peripherals (Icons always remain upright via counter-rotation) */
+      .preloader-icon-anchor {
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        margin: -26px 0 0 -26px;
+      }
+      .preloader-icon-anchor.pos-left {
+        left: 45px;
+        top: 50%;
+      }
+      .preloader-icon-anchor.pos-right {
+        left: 455px;
+        top: 50%;
+      }
+      .preloader-icon-anchor.pos-top {
+        left: 50%;
+        top: 45px;
+      }
+      .preloader-icon-anchor.pos-bottom {
+        left: 50%;
+        top: 455px;
+      }
+
+      .preloader-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        background: rgba(7, 24, 43, 0.88);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(2, 132, 199, 0.15);
+        animation: preloaderCounterSpin 14s linear infinite;
+        position: relative;
+        transition: border-color 0.3s ease;
+      }
+
+      @keyframes preloaderCounterSpin {
+        to { transform: rotate(-360deg); }
+      }
+
+      /* Individual Icon Visual Nuance & Micro-Motions */
+      .preloader-keyboard {
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        color: #38bdf8;
+      }
+      .preloader-keyboard .micro-pulse {
+        animation: keyboardKeySweep 2.2s ease-in-out infinite;
+      }
+      @keyframes keyboardKeySweep {
+        0%, 100% { opacity: 0.6; stroke-width: 1.5; }
+        50% { opacity: 1; stroke-width: 2.1; filter: drop-shadow(0 0 4px #38bdf8); }
+      }
+
+      .preloader-mouse {
+        border: 1px solid rgba(168, 85, 247, 0.4);
+        color: #c084fc;
+      }
+      .preloader-mouse .wheel-indicator {
+        animation: mouseWheelScroll 1.6s ease-in-out infinite;
+      }
+      @keyframes mouseWheelScroll {
+        0%, 100% { transform: translateY(0); opacity: 0.7; }
+        50% { transform: translateY(3px); opacity: 1; filter: drop-shadow(0 0 3px #c084fc); }
+      }
+
+      .preloader-cursor {
+        border: 1px solid rgba(56, 189, 248, 0.4);
+        color: #38bdf8;
+      }
+      .preloader-cursor .cursor-drift {
+        animation: cursorMotion 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+      }
+      @keyframes cursorMotion {
+        0% { transform: translate(0, 0) rotate(0deg); }
+        50% { transform: translate(3px, -2px) rotate(4deg); filter: drop-shadow(0 0 4px #38bdf8); }
+        100% { transform: translate(-2px, 2px) rotate(-3deg); }
+      }
+
+      .preloader-check {
+        border: 1px solid rgba(52, 211, 153, 0.4);
+        color: #34d399;
+      }
+      .preloader-check .shield-pulse {
+        animation: checkHeartbeat 2.4s ease-in-out infinite;
+      }
+      @keyframes checkHeartbeat {
+        0%, 100% { transform: scale(1); filter: none; }
+        50% { transform: scale(1.08); filter: drop-shadow(0 0 5px #34d399); }
+      }
+
+      /* Animated Keycaps - Rhythmic Actuation Across Entire Duration */
+      .preloader-key {
+        position: absolute;
+        padding: 5px 8px;
+        border-radius: 6px;
+        border: 1px solid rgba(56, 189, 248, 0.2);
+        background: rgba(7, 24, 43, 0.75);
+        color: #64748b;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        animation: preloaderKeyCycle 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+        will-change: transform, color, border-color, background, box-shadow;
+      }
+
+      .preloader-key:nth-child(1) { top: 82px; left: 115px; animation-delay: 0s; }
+      .preloader-key:nth-child(2) { top: 135px; left: 70px; animation-delay: 0.3s; }
+      .preloader-key:nth-child(3) { top: 68px; right: 108px; animation-delay: 0.6s; }
+      .preloader-key:nth-child(4) { top: 148px; right: 68px; animation-delay: 0.9s; }
+      .preloader-key:nth-child(5) { bottom: 128px; left: 68px; animation-delay: 1.2s; }
+      .preloader-key:nth-child(6) { bottom: 72px; left: 118px; animation-delay: 1.5s; }
+      .preloader-key:nth-child(7) { bottom: 78px; right: 115px; animation-delay: 1.8s; }
+      .preloader-key:nth-child(8) { bottom: 132px; right: 68px; animation-delay: 2.1s; }
+
+      @keyframes preloaderKeyCycle {
+        0%, 100% {
+          color: #64748b;
+          border-color: rgba(56, 189, 248, 0.2);
+          background: rgba(7, 24, 43, 0.75);
+          transform: translateY(0) scale(1);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        14%, 28% {
+          color: #ffffff;
+          border-color: #38bdf8;
+          background: rgba(2, 132, 199, 0.45);
+          transform: translateY(1.5px) scale(1.08);
+          box-shadow: 0 0 16px rgba(56, 189, 248, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+        }
+        38% {
+          color: #94a3b8;
+          border-color: rgba(56, 189, 248, 0.3);
+          background: rgba(7, 24, 43, 0.85);
+          transform: translateY(0) scale(1);
+          box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
+        }
+      }
+
+      /* Dynamic Click Sonar Ripples */
+      .preloader-click-origin {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        margin: -6px 0 0 -6px;
+      }
+      .preloader-click-origin.origin-1 {
+        top: 155px;
+        left: 155px;
+      }
+      .preloader-click-origin.origin-2 {
+        bottom: 155px;
+        right: 155px;
+      }
+      .preloader-click-dot {
+        position: absolute;
+        inset: 3px;
+        border-radius: 50%;
+        background: #38bdf8;
+        box-shadow: 0 0 12px #38bdf8;
+        animation: clickDotPulse 1.8s ease-in-out infinite;
+      }
+      .preloader-click-origin.origin-2 .preloader-click-dot {
+        background: #c084fc;
+        box-shadow: 0 0 12px #c084fc;
+        animation-delay: 0.9s;
+      }
+      .preloader-click-wave {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 1.5px solid #38bdf8;
+        animation: clickRipple 2.2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+      }
+      .preloader-click-origin.origin-2 .preloader-click-wave {
+        border-color: #c084fc;
+        animation-delay: 1.1s;
+      }
+
+      @keyframes clickDotPulse {
+        0%, 100% { transform: scale(0.8); opacity: 0.6; }
+        50% { transform: scale(1.2); opacity: 1; }
+      }
+      @keyframes clickRipple {
+        0% { transform: scale(0.5); opacity: 0.9; }
+        100% { transform: scale(5.2); opacity: 0; }
+      }
+
+      /* Logo & Brand Architecture */
+      .preloader-logo {
+        position: absolute;
+        z-index: 10;
+        text-align: center;
+        pointer-events: none;
+      }
+      .preloader-brand {
+        color: #ffffff;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        font-size: 46px;
+        font-weight: 800;
+        letter-spacing: -2px;
+        text-shadow: 0 0 32px rgba(56, 189, 248, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .preloader-brand span {
+        color: #38bdf8;
+        background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .preloader-line-wrapper {
+        width: 80px;
+        height: 2px;
+        margin: 12px auto;
+        position: relative;
+        overflow: hidden;
+      }
+      .preloader-line {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, #38bdf8, #0284c7, transparent);
+        box-shadow: 0 0 12px #38bdf8;
+      }
+      .preloader-line-sheen {
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, #ffffff, transparent);
+        animation: lineSheen 2.2s linear infinite;
+      }
+      @keyframes lineSheen {
+        to { transform: translateX(200%); }
+      }
+
+      .preloader-tagline {
+        color: #94a3b8;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9.5px;
+        font-weight: 600;
+        letter-spacing: 2.8px;
+        text-transform: uppercase;
+      }
+
+      /* Progress & Telemetry Feed */
+      .preloader-loading {
+        position: absolute;
+        bottom: 38px;
+        width: 240px;
+        text-align: center;
+      }
+      .preloader-loading-text {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #64748b;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 8px;
+        font-weight: 600;
+        letter-spacing: 1.2px;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+      #preloader-stage {
+        color: #38bdf8;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: opacity 0.15s ease;
+      }
+      #preloader-percent {
+        color: #f1f5f9;
+        font-weight: 700;
+      }
+      .preloader-bar {
+        height: 2.5px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        overflow: hidden;
+        position: relative;
+      }
+      .preloader-fill {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #0284c7, #38bdf8);
+        box-shadow: 0 0 14px #38bdf8;
+        border-radius: 999px;
+        transition: width 0.05s linear;
+      }
+
+      /* Responsive Scaling */
+      @media (max-width: 600px) {
+        .preloader-scene {
+          transform: scale(0.74);
+        }
+      }
+      @media (max-width: 420px) {
+        .preloader-scene {
+          transform: scale(0.60);
+        }
+      }
+    </style>
   </head>
-  <body>
+  <body class="preloader-active">
+    <!-- InputLab Diagnostic Suite Preloader -->
+    <div id="preloader" aria-label="InputLab Diagnostic Suite Loading">
+      <div class="preloader-scene">
+        <div class="preloader-glow"></div>
+
+        <div class="preloader-ring preloader-ring4"></div>
+        <div class="preloader-ring preloader-ring2"></div>
+        <div class="preloader-ring preloader-ring1"></div>
+        <div class="preloader-ring preloader-ring3"></div>
+        <div class="preloader-scanner-cone"></div>
+        <div class="preloader-scanner-beam"></div>
+
+        <!-- Animated keys -->
+        <div class="preloader-key">TAB</div>
+        <div class="preloader-key">A</div>
+        <div class="preloader-key">CTRL</div>
+        <div class="preloader-key">ENTER</div>
+        <div class="preloader-key">SHIFT</div>
+        <div class="preloader-key">S</div>
+        <div class="preloader-key">SPACE</div>
+        <div class="preloader-key">ESC</div>
+
+        <!-- Click animations -->
+        <div class="preloader-click-origin origin-1">
+          <div class="preloader-click-dot"></div>
+          <div class="preloader-click-wave"></div>
+        </div>
+        <div class="preloader-click-origin origin-2">
+          <div class="preloader-click-dot"></div>
+          <div class="preloader-click-wave"></div>
+        </div>
+
+        <!-- Orbiting icons (Upright & Active) -->
+        <div class="preloader-orbit">
+          <div class="preloader-icon-anchor pos-left">
+            <div class="preloader-icon preloader-keyboard" title="Keyboard Diagnostics">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="width: 25px; height: 25px;">
+                <rect x="2" y="5" width="20" height="14" rx="2.5" stroke="currentColor"/>
+                <path class="micro-pulse" d="M5 9h1M8 9h1M11 9h1M14 9h1M17 9h1"/>
+                <path class="micro-pulse" d="M5 12h1M8 12h1M11 12h1M14 12h1M17 12h1"/>
+                <path class="micro-pulse" d="M6 15h8"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="preloader-icon-anchor pos-right">
+            <div class="preloader-icon preloader-mouse" title="Mouse Diagnostics">
+              <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="width: 25px; height: 25px;">
+                <rect x="7" y="2" width="10" height="20" rx="5" stroke="currentColor"/>
+                <path d="M12 2v6" stroke="currentColor"/>
+                <circle class="wheel-indicator" cx="12" cy="6" r="1.2" fill="#c084fc"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="preloader-icon-anchor pos-top">
+            <div class="preloader-icon preloader-cursor" title="Pointer Tracker">
+              <svg class="cursor-drift" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="width: 25px; height: 25px;">
+                <path d="M5 3l7 18 2-7 6-2z"/>
+                <path d="M14 14l5 5"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="preloader-icon-anchor pos-bottom">
+            <div class="preloader-icon preloader-check" title="Verification Passed">
+              <svg class="shield-pulse" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="width: 25px; height: 25px;">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M8 12l3 3 6-7"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand -->
+        <div class="preloader-logo">
+          <div class="preloader-brand">
+            Input<span>Lab</span>
+          </div>
+
+          <div class="preloader-line-wrapper">
+            <div class="preloader-line"></div>
+            <div class="preloader-line-sheen"></div>
+          </div>
+
+          <div class="preloader-tagline">
+            Precision Input Diagnostics
+          </div>
+        </div>
+
+        <!-- Loading Progress & Realtime Diagnostics Feed -->
+        <div class="preloader-loading">
+          <div class="preloader-loading-text">
+            <span id="preloader-stage">INITIALIZING HID BUS</span>
+            <span id="preloader-percent">0%</span>
+          </div>
+
+          <div class="preloader-bar">
+            <div class="preloader-fill" id="preloader-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function() {
+        var initialPreloader = document.getElementById("preloader");
+        if (initialPreloader) {
+          window.__inputlabPreloaderHTML = initialPreloader.outerHTML;
+        }
+
+        var STAGES = [
+          { threshold: 0, label: "INITIALIZING HID BUS" },
+          { threshold: 24, label: "POLLING HIGH-SPEED USB" },
+          { threshold: 52, label: "SAMPLING MATRIX & ENCODER" },
+          { threshold: 76, label: "VERIFYING SUB-MS TIMING" },
+          { threshold: 96, label: "DIAGNOSTIC ENGINE READY" }
+        ];
+
+        function runPreloaderEngine(targetEl) {
+          if (!targetEl) return;
+          document.documentElement.classList.add("preloader-active");
+          document.body.classList.add("preloader-active");
+          var percent = targetEl.querySelector("#preloader-percent");
+          var fill = targetEl.querySelector("#preloader-fill");
+          var stage = targetEl.querySelector("#preloader-stage");
+          var isDone = false;
+          var startTime = Date.now();
+          var minDuration = 2400; // Guaranteed at least 2.4s of smooth continuous motion
+
+          function updateStageText(pct) {
+            if (!stage) return;
+            var currentLabel = STAGES[0].label;
+            for (var i = 0; i < STAGES.length; i++) {
+              if (pct >= STAGES[i].threshold) {
+                currentLabel = STAGES[i].label;
+              }
+            }
+            if (stage.textContent !== currentLabel) {
+              stage.textContent = currentLabel;
+            }
+          }
+
+          function complete() {
+            if (isDone) return;
+            isDone = true;
+            clearInterval(timer);
+            if (percent) percent.textContent = "100%";
+            if (fill) fill.style.width = "100%";
+            updateStageText(100);
+
+            setTimeout(function() {
+              targetEl.classList.add("hide");
+              document.documentElement.classList.remove("preloader-active");
+              document.body.classList.remove("preloader-active");
+              setTimeout(function() {
+                try {
+                  if (targetEl.parentNode) {
+                    targetEl.parentNode.removeChild(targetEl);
+                  }
+                } catch(e) {}
+              }, 800);
+            }, 300);
+          }
+
+          var timer = setInterval(function() {
+            var elapsed = Date.now() - startTime;
+            var ratio = Math.min(elapsed / minDuration, 1);
+            // Smooth progress interpolation
+            var currentPercent = Math.min(100, Math.floor(ratio * 100));
+
+            if (percent) percent.textContent = currentPercent + "%";
+            if (fill) fill.style.width = currentPercent + "%";
+            updateStageText(currentPercent);
+
+            if (elapsed >= minDuration) {
+              clearInterval(timer);
+              setTimeout(complete, 250);
+            }
+          }, 25);
+
+          // Allow manual dismissal only AFTER the full choreographed showcase has completed
+          function onUserDismiss() {
+            if (Date.now() - startTime >= minDuration) {
+              complete();
+              window.removeEventListener("keydown", onUserDismiss);
+            }
+          }
+          targetEl.addEventListener("click", onUserDismiss);
+          window.addEventListener("keydown", onUserDismiss);
+
+          // Safety failsafe
+          setTimeout(complete, 4800);
+        }
+
+        if (initialPreloader) {
+          runPreloaderEngine(initialPreloader);
+        }
+
+        // Global function to replay preloader on demand
+        window.replayInputLabPreloader = function() {
+          var existing = document.getElementById("preloader");
+          if (existing) {
+            try { existing.parentNode.removeChild(existing); } catch(e) {}
+          }
+          if (window.__inputlabPreloaderHTML) {
+            var wrapper = document.createElement("div");
+            wrapper.innerHTML = window.__inputlabPreloaderHTML;
+            var newEl = wrapper.firstElementChild;
+            newEl.classList.remove("hide");
+            document.body.appendChild(newEl);
+            runPreloaderEngine(newEl);
+          }
+        };
+      })();
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

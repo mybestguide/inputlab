@@ -138,6 +138,19 @@ export const RootLayout: React.FC = () => {
                   About &amp; Browser API Audit
                 </Link>
               </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof (window as any).replayInputLabPreloader === 'function') {
+                      (window as any).replayInputLabPreloader();
+                    }
+                  }}
+                  className="hover:text-sky-500 dark:hover:text-sky-400 transition-colors text-left font-mono text-[11px]"
+                >
+                  &gt; Replay Preloader
+                </button>
+              </li>
             </ul>
             <div className="mt-4 pt-3 border-t border-zinc-200 dark:border-zinc-800 text-[11px] font-mono text-zinc-400">
               Compatible with Chrome, Firefox, Safari, Edge, and Opera on Windows, macOS, Linux, and ChromeOS.
