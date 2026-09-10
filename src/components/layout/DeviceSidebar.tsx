@@ -38,7 +38,7 @@ interface SidebarCategory {
 export const DeviceSidebar: React.FC = () => {
   const location = useLocation();
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
-  const isMouse = location.pathname.startsWith('/mouse') || location.pathname === '/';
+  const isMouse = location.pathname.startsWith('/mouse');
   const isKeyboard = location.pathname.startsWith('/keyboard');
 
   if (!isMouse && !isKeyboard) {

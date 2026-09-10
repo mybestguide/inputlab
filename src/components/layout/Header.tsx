@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Mouse, Keyboard, BookOpen, Info, Moon, Sun, Volume2, VolumeX, Activity, Menu, X, ShieldCheck } from 'lucide-react';
+import { Home, Mouse, Keyboard, BookOpen, Info, Moon, Sun, Volume2, VolumeX, Activity, Menu, X, ShieldCheck } from 'lucide-react';
 import { useBrowserCapabilities } from '../../hooks/useBrowserCapabilities';
 import { loadSettings, saveSettings } from '../../core/storage/localStorageAdapter';
 import { cn } from '../../lib/utils/cn';
@@ -28,8 +28,9 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
   };
 
   const navItems = [
-    { to: '/mouse', label: 'Mouse Diagnostics', shortLabel: 'Mouse', icon: Mouse },
-    { to: '/keyboard', label: 'Keyboard Diagnostics', shortLabel: 'Keyboard', icon: Keyboard },
+    { to: '/', label: 'Home', shortLabel: 'Home', icon: Home, exact: true },
+    { to: '/mouse', label: 'Mouse Test', shortLabel: 'Mouse Test', icon: Mouse },
+    { to: '/keyboard', label: 'Keyboard Test', shortLabel: 'Keyboard Test', icon: Keyboard },
     { to: '/learn', label: 'Methodology & Science', shortLabel: 'Learn', icon: BookOpen },
     { to: '/about', label: 'About & System Audit', shortLabel: 'About', icon: Info },
   ];
@@ -39,7 +40,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand & Identity */}
         <NavLink
-          to="/mouse"
+          to="/"
           aria-label="InputLab Home"
           className="flex items-center gap-2.5 group shrink-0 min-h-[44px] py-1"
         >
@@ -67,6 +68,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
               <NavLink
                 key={item.to}
                 to={item.to}
+                end={item.exact}
                 className={({ isActive }) =>
                   cn(
                     'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors min-h-[36px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500',
@@ -148,6 +150,7 @@ export const Header: React.FC<HeaderProps> = ({ theme, onToggleTheme }) => {
                 <NavLink
                   key={item.to}
                   to={item.to}
+                  end={item.exact}
                   className={({ isActive }) =>
                     cn(
                       'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500',

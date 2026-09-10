@@ -33,7 +33,7 @@ export const Breadcrumbs: React.FC = () => {
 
   return (
     <nav aria-label="Breadcrumbs" className="flex flex-wrap items-center gap-1 sm:gap-1.5 text-xs font-mono text-zinc-400 dark:text-zinc-500 mb-4 select-none">
-      <NavLink to="/mouse" className="hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center gap-1 py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-500 rounded px-1 transition-colors">
+      <NavLink to="/" className="hover:text-zinc-900 dark:hover:text-zinc-100 flex items-center gap-1 py-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-500 rounded px-1 transition-colors">
         <Home className="w-3.5 h-3.5" />
         <span className="hidden sm:inline">InputLab</span>
       </NavLink>

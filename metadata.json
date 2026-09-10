@@ -1,6 +1,6 @@
 {
-  "name": "InputLab",
-  "description": "A precision browser-based input device testing and diagnostic suite for mice, keyboards, and gamepads.",
+  "name": "Keyboard & Mouse Tester Online | InputLab",
+  "description": "Free browser-based keyboard tester and mouse tester to check keys, buttons, clicks, double-click chatter, movement, and scroll wheel online without installing software.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

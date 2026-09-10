@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { RootLayout } from './RootLayout';
+import HomePage from './home/HomePage';
 
 import MouseOverviewPage from './mouse/MouseOverviewPage';
 import ButtonsInspectorPage from './mouse/ButtonsInspectorPage';
@@ -28,7 +29,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/mouse" replace />,
+        element: <HomePage />,
       },
       // Mouse Suite
       {
@@ -61,7 +62,7 @@ export const router = createBrowserRouter([
       { path: 'learn', element: <LearnPage /> },
       { path: 'learn/*', element: <LearnPage /> },
       { path: 'about', element: <AboutPage /> },
-      { path: '*', element: <Navigate to="/mouse" replace /> },
+      { path: '*', element: <Navigate to="/" replace /> },
     ],
   },
 ]);

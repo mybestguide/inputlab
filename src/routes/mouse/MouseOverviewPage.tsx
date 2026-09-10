@@ -225,6 +225,19 @@ export default function MouseOverviewPage() {
             </p>
           </NavLink>
         </div>
+
+        {/* Cross Navigation Bar */}
+        <div className="mt-6 p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <NavLink to="/" className="text-sky-600 dark:text-sky-400 hover:underline font-medium flex items-center gap-1">
+            &larr; Return to InputLab Home
+          </NavLink>
+          <div className="flex items-center gap-2">
+            <span className="text-zinc-500 dark:text-zinc-400">Also testing a keyboard?</span>
+            <NavLink to="/keyboard" className="text-sky-600 dark:text-sky-400 hover:underline font-semibold flex items-center gap-1">
+              Open Keyboard Tester &rarr;
+            </NavLink>
+          </div>
+        </div>
       </div>
     </DiagnosticShell>
   );
